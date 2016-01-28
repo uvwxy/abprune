@@ -1,0 +1,17 @@
+{
+  "name": "abprune",
+  "version": "1.0.0",
+  "description": "Library that provides an alpha-beta pruning search algorithm",
+  "main": "abprune.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Smith code@uvwxy.de",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.6"
+  }
+}
