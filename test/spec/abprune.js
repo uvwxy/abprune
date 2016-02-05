@@ -3,7 +3,7 @@ describe("The ABPrune engine", function () {
     // Game rules: each player picks a place in the array.
     // Game score is the sum of chosen indices.
     var game = {
-        createInitState: function (size) {
+        initialize: function (size) {
             var state = {};
             this._copyFunctions(state);
             // Setup empty game [0,1,2,...,size-1]
@@ -57,13 +57,13 @@ describe("The ABPrune engine", function () {
 
 
     it('should create correct initial state', function(){
-        var state = game.createInitState(10);
+        var state = game.initialize(10);
 
         expect(state.data.length).toBe(10);
     });
 
     it('should calculate correct score', function(){
-        var state = game.createInitState(10);
+        var state = game.initialize(10);
         state.data[5] = 1;
 
         expect(state.getScore(1)).toBe(5);
@@ -88,7 +88,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should use isGameOver correctly', function () {
-        var state = game.createInitState(10);
+        var state = game.initialize(10);
 
         expect(state.isGameOver()).toBe(false);
 
@@ -98,7 +98,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should use isMoveValid correctly', function(){
-        var state = game.createInitState(3);
+        var state = game.initialize(3);
 
         state.data[1] = 1;
 
@@ -111,7 +111,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should use getSuccessors correctly', function(){
-        var state = game.createInitState(3);
+        var state = game.initialize(3);
 
         var succs = state.getSuccessors(true);
 
@@ -128,7 +128,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should be able to use _copyFunctions correctly', function(){
-        var state = game.createInitState(3);
+        var state = game.initialize(3);
 
         var stateClone = {data : [1,1,1]};
         state._copyFunctions(stateClone);
@@ -136,7 +136,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should calculate depth 0 correctly', function () {
-        var state = game.createInitState(3);
+        var state = game.initialize(3);
         var ab = new ABPrune(0, state);
         var result = ab.minmax();
         expect(result.score).toBe(0)
@@ -144,7 +144,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should calculate depth 10, with no moves left', function () {
-        var state = game.createInitState(3);
+        var state = game.initialize(3);
         state.data = [1,1,1];
         state.score = 3;
         var ab = new ABPrune(10, state);
@@ -154,7 +154,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should calculate depth 1 correctly', function () {
-        var state = game.createInitState(3);
+        var state = game.initialize(3);
         var ab = new ABPrune(1, state);
         var result = ab.minmax();
         expect(result.data).toEqual([0,0,1]);
@@ -163,7 +163,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should calculate depth 7 correctly', function () {
-        var state = game.createInitState(7);
+        var state = game.initialize(7);
         var ab = new ABPrune(7, state);
         var result = ab.minmax();
         expect(result.data).toEqual([0,0,0,0,0,0,1]);
@@ -172,6 +172,7 @@ describe("The ABPrune engine", function () {
     });
 
     it('should equals minmax to alphabeta', function(){
-
+        var stateMm = game.initialize(7);
+        var stateAb = game.initialize(7);
     });
 });
