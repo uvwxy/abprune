@@ -11,16 +11,13 @@ var ABPrune = (function ABPrune() {
 
         self.alphabeta = function(){
             return self._alphabeta(self._state, self._depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
-        }
+        };
 
-        self.minmax = function(){
-            return self._minmax(self._state, self._depth, true);
-        }
 
-        self._alphabeta = function (state, depth, alpha, beta, maximizePlayer) {
+        self._alphabeta = function (state, depth, alpha, beta, max) {
             if (depth == 0 || !state.isMovePossible()) {
-                var stateScore = state.getScore();
-                return {sc: stateScore, st: state};
+                var stateScore = state.getScore(max ? 1 : 2);
+                return {score: stateScore, state: state};
             }
 
             return max ? self._abmax(state, depth, alpha, beta) : self._abmin(state, depth, alpha, beta);
@@ -32,16 +29,16 @@ var ABPrune = (function ABPrune() {
             for (var i = 0; i < states.length; i++) {
                 var eval = self.alphabeta(states[i], depth - 1, alpha, beta, false);
 
-                if (eval.sc > alpha) {
+                if (eval.score > alpha) {
                     maxScoredState = states[i];
-                    alpha = eval.sc
+                    alpha = eval.score
                 }
-                if (eval.sc >= beta) {
+                if (eval.score >= beta) {
                     // beta cut-off
                     break;
                 }
             }
-            return {sc: alpha, st: maxScoredState};
+            return {score: alpha, state: maxScoredState};
         };
 
         self._abmin = function (state, depth, alpha, beta) {
@@ -49,24 +46,26 @@ var ABPrune = (function ABPrune() {
             var minScoredState = null;
             for (var i = 0; i < states.length; i++) {
                 var eval = self.alphabeta(states[i], depth - 1, alpha, beta, true);
-                if (eval.sc < beta) {
+                if (eval.score < beta) {
                     minScoredState = states[i];
-                    beta = eval.sc;
+                    beta = eval.score;
                 }
-                if (eval.sc <= alpha) {
+                if (eval.score <= alpha) {
                     // alpha cut-off
                     break;
                 }
             }
-            return {sc: beta, st: minScoredState};
+            return {score: beta, state: minScoredState};
         };
 
+        self.minmax = function(){
+            return self._minmax(self._state, self._depth, true);
+        };
 
         self._minmax = function (state, depth, max) {
-
             if (depth == 0 || !state.isMovePossible()) {
-                var score = state.getScore();
-                return {s: score, n: state};
+                state.getScore(1);
+                return state;
             }
 
             return max ? self._max(state, depth) : self._min(state, depth);
@@ -79,11 +78,12 @@ var ABPrune = (function ABPrune() {
             var states = state.getSuccessors(false);
 
             for (var i = 0; i < states.length; i++) {
-                var eval = self.minmax(states[i], depth - 1, true);
-                minScoredState = minScore < eval.s ? minScoredState : states[i];
-                minScore = minScore < eval.s ? minScore : eval.n;
+                var eval = self._minmax(states[i], depth - 1, true);
+                minScoredState = minScore < eval.score ? minScoredState : states[i];
+                minScore = minScore < eval.score ? minScore : eval.score;
             }
-            return {s: minScore, n: minScoredState};
+            minScoredState.score = minScore;
+            return minScoredState;
         };
 
         self._max = function (state, depth) {
@@ -92,11 +92,12 @@ var ABPrune = (function ABPrune() {
             var states = state.getSuccessors(true);
 
             for (var i = 0; i < states.length; i++) {
-                var eval = self.minmax(states[i], depth - 1, false);
-                maxScoredState = maxScore > eval.s ? maxScoredState : states[i];
-                maxScore = maxScore > eval.s ? maxScore : eval.n;
+                var eval = self._minmax(states[i], depth - 1, false);
+                maxScoredState = maxScore > eval.score ? maxScoredState : states[i];
+                maxScore = maxScore > eval.score ? maxScore : eval.score;
             }
-            return {s: maxScore, n: maxScoredState};
+            maxScoredState.score = maxScore;
+            return maxScoredState;
         };
 
     };
