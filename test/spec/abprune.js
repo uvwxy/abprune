@@ -171,8 +171,25 @@ describe("The ABPrune engine", function () {
         expect(result.move).toBe(6)
     });
 
-    it('should equals minmax to alphabeta', function(){
-        var stateMm = game.initialize(7);
-        var stateAb = game.initialize(7);
+    it('should have identical minmax and alphabeta searches (depth 0)', function(){
+        var searchMm = new ABPrune(0, game.initialize(7)).minmax();
+        var searchAb = new ABPrune(0, game.initialize(7)).alphabeta();
+        expect(searchAb).toEqual(searchMm);
+    });
+
+
+    it('should have identical minmax and alphabeta searches (depth 1)', function(){
+        var searchMm = new ABPrune(1, game.initialize(7)).minmax();
+        var searchAb = new ABPrune(1, game.initialize(7)).alphabeta();
+        expect(searchAb.data).toEqual(searchMm.data);
+        expect(searchAb.move).toEqual(searchMm.move);
+        expect(searchAb.score).toEqual(searchMm.score);
+    });
+
+
+    it('should have identical minmax and alphabeta searches (depth 7)', function(){
+        var searchMm = new ABPrune(7, game.initialize(7)).minmax();
+        var searchAb = new ABPrune(7, game.initialize(7)).alphabeta();
+        expect(searchAb.data).toEqual(searchMm.data);
     });
 });

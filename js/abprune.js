@@ -16,8 +16,8 @@ var ABPrune = (function ABPrune() {
 
         self._alphabeta = function (state, depth, alpha, beta, max) {
             if (depth == 0 || state.isGameOver()) {
-                var stateScore = state.getScore(max ? 1 : 2);
-                return {score: stateScore, state: state};
+                state.getScore(max ? 1 : 2);
+                return state;
             }
 
             return max ? self._abmax(state, depth, alpha, beta) : self._abmin(state, depth, alpha, beta);
@@ -27,7 +27,7 @@ var ABPrune = (function ABPrune() {
             var states = state.getSuccessors(true);
             var maxScoredState = null;
             for (var i = 0; i < states.length; i++) {
-                var eval = self.alphabeta(states[i], depth - 1, alpha, beta, false);
+                var eval = self._alphabeta(states[i], depth - 1, alpha, beta, false);
 
                 if (eval.score > alpha) {
                     maxScoredState = states[i];
@@ -38,14 +38,15 @@ var ABPrune = (function ABPrune() {
                     break;
                 }
             }
-            return {score: alpha, state: maxScoredState};
+            maxScoredState.score = alpha;
+            return maxScoredState;
         };
 
         self._abmin = function (state, depth, alpha, beta) {
             var states = state.getSuccessors(false);
             var minScoredState = null;
             for (var i = 0; i < states.length; i++) {
-                var eval = self.alphabeta(states[i], depth - 1, alpha, beta, true);
+                var eval = self._alphabeta(states[i], depth - 1, alpha, beta, true);
                 if (eval.score < beta) {
                     minScoredState = states[i];
                     beta = eval.score;
@@ -55,7 +56,8 @@ var ABPrune = (function ABPrune() {
                     break;
                 }
             }
-            return {score: beta, state: minScoredState};
+            minScoredState.score = beta;
+            return minScoredState;
         };
 
         self.minmax = function(){
