@@ -15,7 +15,7 @@ var ABPrune = (function ABPrune() {
 
 
         self._alphabeta = function (state, depth, alpha, beta, max) {
-            if (depth == 0 || !state.isMovePossible()) {
+            if (depth == 0 || state.isGameOver()) {
                 var stateScore = state.getScore(max ? 1 : 2);
                 return {score: stateScore, state: state};
             }
@@ -63,7 +63,7 @@ var ABPrune = (function ABPrune() {
         };
 
         self._minmax = function (state, depth, max) {
-            if (depth == 0 || !state.isMovePossible()) {
+            if (depth == 0 || state.isGameOver()) {
                 state.getScore(1);
                 return state;
             }

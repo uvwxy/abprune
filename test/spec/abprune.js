@@ -12,7 +12,7 @@ describe("The ABPrune engine", function () {
         },
         _copyFunctions: function(state){
             state.getSuccessors = this.getSuccessors;
-            state.isMovePossible = this.isMovePossible;
+            state.isGameOver = this.isGameOver;
             state.getScore = this.getScore;
             state.isMoveValid = this.isMoveValid;
             state._copyFunctions = this._copyFunctions;
@@ -20,7 +20,7 @@ describe("The ABPrune engine", function () {
         getSuccessors: function (max) {
             var succs = [];
             // returns a list of states, one for each possible move
-            if (this.isMovePossible()) {
+            if (!this.isGameOver()) {
                 for (var move = 0; move < this.data.length; move++){
                     if (this.isMoveValid(move, max ? 1 : 2)){
                         var s = { data : this.data.slice(0) };
@@ -36,14 +36,14 @@ describe("The ABPrune engine", function () {
         isMoveValid: function(location, playerId) {
             return this.data[location] == 0;
         },
-        isMovePossible: function () {
+        isGameOver: function () {
             // checks whether any party can move
             for (var i = 0; i < this.data.length; i++){
                 if (this.data[i] == 0){
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         },
 
         getScore: function (playerId) {
@@ -87,14 +87,14 @@ describe("The ABPrune engine", function () {
         expect(myAbPrune._depth).toBe(10);
     });
 
-    it('should use isMovePossible correctly', function () {
+    it('should use isGameOver correctly', function () {
         var state = game.createInitState(10);
 
-        expect(state.isMovePossible()).toBe(true);
+        expect(state.isGameOver()).toBe(false);
 
         state.data = Array(10).fill(1);
 
-        expect(state.isMovePossible()).toBe(false);
+        expect(state.isGameOver()).toBe(true);
     });
 
     it('should use isMoveValid correctly', function(){
@@ -169,5 +169,9 @@ describe("The ABPrune engine", function () {
         expect(result.data).toEqual([0,0,0,0,0,0,1]);
         expect(result.score).toBe(12);
         expect(result.move).toBe(6)
+    });
+
+    it('should equals minmax to alphabeta', function(){
+
     });
 });
