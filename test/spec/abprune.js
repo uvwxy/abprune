@@ -138,7 +138,7 @@ describe("The ABPrune engine", function () {
     it('should calculate depth 0 correctly', function () {
         var state = game.initialize(3);
         var ab = new ABPrune(0, state);
-        var result = ab.minmax();
+        var result = ab.searchMinMax();
         expect(result.score).toBe(0)
         expect(result).toBe(state);
     });
@@ -148,7 +148,7 @@ describe("The ABPrune engine", function () {
         state.data = [1,1,1];
         state.score = 3;
         var ab = new ABPrune(10, state);
-        var result = ab.minmax();
+        var result = ab.searchMinMax();
         expect(result.score).toBe(3);
         expect(result).toEqual(state);
     });
@@ -156,7 +156,7 @@ describe("The ABPrune engine", function () {
     it('should calculate depth 1 correctly', function () {
         var state = game.initialize(3);
         var ab = new ABPrune(1, state);
-        var result = ab.minmax();
+        var result = ab.searchMinMax();
         expect(result.data).toEqual([0,0,1]);
         expect(result.score).toBe(2);
         expect(result.move).toBe(2);
@@ -165,31 +165,22 @@ describe("The ABPrune engine", function () {
     it('should calculate depth 7 correctly', function () {
         var state = game.initialize(7);
         var ab = new ABPrune(7, state);
-        var result = ab.minmax();
+        var result = ab.searchMinMax();
         expect(result.data).toEqual([0,0,0,0,0,0,1]);
         expect(result.score).toBe(12);
         expect(result.move).toBe(6)
     });
 
-    it('should have identical minmax and alphabeta searches (depth 0)', function(){
-        var searchMm = new ABPrune(0, game.initialize(7)).minmax();
-        var searchAb = new ABPrune(0, game.initialize(7)).alphabeta();
-        expect(searchAb).toEqual(searchMm);
-    });
 
-
-    it('should have identical minmax and alphabeta searches (depth 1)', function(){
-        var searchMm = new ABPrune(1, game.initialize(7)).minmax();
-        var searchAb = new ABPrune(1, game.initialize(7)).alphabeta();
-        expect(searchAb.data).toEqual(searchMm.data);
-        expect(searchAb.move).toEqual(searchMm.move);
-        expect(searchAb.score).toEqual(searchMm.score);
-    });
-
-
-    it('should have identical minmax and alphabeta searches (depth 7)', function(){
-        var searchMm = new ABPrune(7, game.initialize(7)).minmax();
-        var searchAb = new ABPrune(7, game.initialize(7)).alphabeta();
-        expect(searchAb.data).toEqual(searchMm.data);
-    });
+    for (var i = 0; i < 8; i++){
+        (function(depth){
+             it('should have identical minmax and alphabeta searches (depth '+i+')', function(){
+                    var searchMm = new ABPrune(i, game.initialize(7)).searchMinMax();
+                    var searchAb = new ABPrune(i, game.initialize(7)).searchAlphaBeta();
+                    expect(searchAb.data).toEqual(searchMm.data);
+                    expect(searchAb.move).toEqual(searchMm.move);
+                    expect(searchAb.score).toEqual(searchMm.score);
+                });
+        })(i);
+    }
 });

@@ -9,14 +9,14 @@ var ABPrune = (function ABPrune() {
         self._depth = depth;
         self._state = state;
 
-        self.alphabeta = function(){
+        self.searchAlphaBeta = function(){
             return self._alphabeta(self._state, self._depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
         };
 
 
         self._alphabeta = function (state, depth, alpha, beta, max) {
             if (depth == 0 || state.isGameOver()) {
-                state.getScore(max ? 1 : 2);
+                state.getScore(1);
                 return state;
             }
 
@@ -28,7 +28,6 @@ var ABPrune = (function ABPrune() {
             var maxScoredState = null;
             for (var i = 0; i < states.length; i++) {
                 var eval = self._alphabeta(states[i], depth - 1, alpha, beta, false);
-
                 if (eval.score > alpha) {
                     maxScoredState = states[i];
                     alpha = eval.score
@@ -38,6 +37,7 @@ var ABPrune = (function ABPrune() {
                     break;
                 }
             }
+            maxScoredState = maxScoredState || {}; // not every path returns a state
             maxScoredState.score = alpha;
             return maxScoredState;
         };
@@ -56,11 +56,12 @@ var ABPrune = (function ABPrune() {
                     break;
                 }
             }
+            minScoredState = minScoredState || {}; // not every path returns a state
             minScoredState.score = beta;
             return minScoredState;
         };
 
-        self.minmax = function(){
+        self.searchMinMax = function(){
             return self._minmax(self._state, self._depth, true);
         };
 
