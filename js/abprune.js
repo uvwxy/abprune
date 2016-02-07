@@ -20,11 +20,15 @@ ABPrune.Game = (function () {
         self.isMoveValid = function (location, playerId) {
             throw new TypeError('isMoveValid not implemented')
         };
+        self.initialize = function initialize (size) {
+            throw new TypeError('isMoveValid not implemented')
+        };
         self._copyFunctions = function (state) {
             state.getSuccessors = this.getSuccessors;
             state.isGameOver = this.isGameOver;
             state.getScore = this.getScore;
             state.isMoveValid = this.isMoveValid;
+            state.initialize = this.initialize;
             state._copyFunctions = self._copyFunctions;
         };
 

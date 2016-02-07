@@ -37,17 +37,16 @@ describe("The ABPruneSearch engine", function () {
             }, 0);
 
             return this.score;
+        },
+        initialize: function (size) {
+            var state = {};
+            this._copyFunctions(state);
+
+            // Setup empty game [0,1,2,...,size-1]
+            state.data = Array(size).fill(0);
+            return state;
         }
     });
-
-    game.initialize = function (size) {
-        var state = {};
-        this._copyFunctions(state);
-
-        // Setup empty game [0,1,2,...,size-1]
-        state.data = Array(size).fill(0);
-        return state;
-    };
 
     it('should create correct initial state', function () {
         var state = game.initialize(10);
