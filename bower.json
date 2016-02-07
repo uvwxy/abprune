@@ -5,7 +5,7 @@
   "authors": [
     "Paul Smith code@uvwxy.de"
   ],
-  "license": "AGPL-3.0",
+  "license": "Apache2",
   "keywords": [
     "Alpha-Beta",
     "MinMax",
