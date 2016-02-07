@@ -1,15 +1,47 @@
 /**
- * Created by Paul Smith on 28/01/16.
+ * Created by Paul Smith code@uvwxy.de on 28/01/16.
  */
 
-var ABPrune = (function ABPrune() {
+var ABPruneGame = (function () {
+    return function ABPruneGameConstructor(implementation) {
+        var self = this;
+
+        self.getSuccessors = function () {
+            throw new TypeError('getSuccessors not implemented')
+        };
+        self.isGameOver = function () {
+            throw new TypeError('isGameOver not implemented')
+        };
+        self.getScore = function () {
+            throw new TypeError('getScore not implemented')
+        };
+        self.isMoveValid = function () {
+            throw new TypeError('isMoveValid not implemented')
+        };
+        self._copyFunctions = function (state) {
+            state.getSuccessors = this.getSuccessors;
+            state.isGameOver = this.isGameOver;
+            state.getScore = this.getScore;
+            state.isMoveValid = this.isMoveValid;
+            state._copyFunctions = self._copyFunctions;
+        };
+
+        if (implementation) {
+            // copy functions from implementation to created instance
+            var cc = self._copyFunctions.bind(implementation);
+            cc(self);
+        }
+    };
+})();
+
+var ABPruneSearch = (function ABPrune() {
 
     return function ABPruneConstructor(depth, state) {
         var self = this; // Cache the `this` keyword
         self._depth = depth;
         self._state = state;
 
-        self.searchAlphaBeta = function(){
+        self.searchAlphaBeta = function () {
             return self._alphabeta(self._state, self._depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
         };
 
@@ -61,7 +93,7 @@ var ABPrune = (function ABPrune() {
             return minScoredState;
         };
 
-        self.searchMinMax = function(){
+        self.searchMinMax = function () {
             return self._minmax(self._state, self._depth, true);
         };
 
