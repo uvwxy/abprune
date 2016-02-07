@@ -8,16 +8,16 @@ ABPrune.Game = (function () {
     return function ABPruneGameConstructor(implementation) {
         var self = this;
 
-        self.getSuccessors = function () {
+        self.getSuccessors = function (max) {
             throw new TypeError('getSuccessors not implemented')
         };
         self.isGameOver = function () {
             throw new TypeError('isGameOver not implemented')
         };
-        self.getScore = function () {
+        self.getScore = function (playerId) {
             throw new TypeError('getScore not implemented')
         };
-        self.isMoveValid = function () {
+        self.isMoveValid = function (location, playerId) {
             throw new TypeError('isMoveValid not implemented')
         };
         self._copyFunctions = function (state) {

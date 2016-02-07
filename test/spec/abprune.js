@@ -125,12 +125,13 @@ describe("The ABPruneSearch engine", function () {
         var stateClone = {data: [1, 1, 1]};
         state._copyFunctions(stateClone);
         expect(stateClone.getScore(1)).toBe(3);
+        expect(stateClone.isGameOver()).toBe(true);
+        expect(stateClone.getSuccessors(true))
     });
 
     it('should calculate depth 0 correctly', function () {
         var state = game.initialize(3);
-        var ab = new ABPrune.MinMax(0, state);
-        var result = ab.search();
+        var result = new ABPrune.MinMax(0, state).search();
         expect(result.score).toBe(0)
         expect(result).toBe(state);
     });
@@ -139,8 +140,7 @@ describe("The ABPruneSearch engine", function () {
         var state = game.initialize(3);
         state.data = [1, 1, 1];
         state.score = 3;
-        var ab = new ABPrune.MinMax(10, state);
-        var result = ab.search();
+        var result = new ABPrune.MinMax(10, state).search();
         expect(result.score).toBe(3);
         expect(result).toEqual(state);
     });
