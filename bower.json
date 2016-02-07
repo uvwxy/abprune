@@ -1,0 +1,24 @@
+{
+  "name": "abprune",
+  "description": "Library that provides an alpha-beta pruning search algorithm",
+  "main": "abprune.js",
+  "authors": [
+    "Paul Smith code@uvwxy.de"
+  ],
+  "license": "AGPL-3.0",
+  "keywords": [
+    "Alpha-Beta",
+    "MinMax",
+    "MiniMax",
+    "Tree Search"
+  ],
+  "homepage": "https://github.com/uvwxy/abprune",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
