@@ -2,7 +2,7 @@ describe("The ABPruneSearch engine", function () {
 
 
     // override implementation of abstract ABPrune Interface
-    var game = new ABPruneGame({
+    var game = new ABPrune.Game({
         getSuccessors: function (max) {
             var succs = [];
             // returns a list of states, one for each possible move
@@ -42,7 +42,6 @@ describe("The ABPruneSearch engine", function () {
 
     game.initialize = function (size) {
         var state = {};
-        console.log(this);
         this._copyFunctions(state);
 
         // Setup empty game [0,1,2,...,size-1]
@@ -76,7 +75,7 @@ describe("The ABPruneSearch engine", function () {
     });
 
     it('should have depth set', function () {
-        var myAbPrune = new ABPruneSearch(10, null);
+        var myAbPrune = new ABPrune.MinMax(10, null);
         expect(myAbPrune._depth).toBe(10);
     });
 
@@ -130,8 +129,8 @@ describe("The ABPruneSearch engine", function () {
 
     it('should calculate depth 0 correctly', function () {
         var state = game.initialize(3);
-        var ab = new ABPruneSearch(0, state);
-        var result = ab.searchMinMax();
+        var ab = new ABPrune.MinMax(0, state);
+        var result = ab.search();
         expect(result.score).toBe(0)
         expect(result).toBe(state);
     });
@@ -140,16 +139,15 @@ describe("The ABPruneSearch engine", function () {
         var state = game.initialize(3);
         state.data = [1, 1, 1];
         state.score = 3;
-        var ab = new ABPruneSearch(10, state);
-        var result = ab.searchMinMax();
+        var ab = new ABPrune.MinMax(10, state);
+        var result = ab.search();
         expect(result.score).toBe(3);
         expect(result).toEqual(state);
     });
 
     it('should calculate depth 1 correctly', function () {
         var state = game.initialize(3);
-        var ab = new ABPruneSearch(1, state);
-        var result = ab.searchMinMax();
+        var result = new ABPrune.MinMax(1, state).search();
         expect(result.data).toEqual([0, 0, 1]);
         expect(result.score).toBe(2);
         expect(result.move).toBe(2);
@@ -157,8 +155,7 @@ describe("The ABPruneSearch engine", function () {
 
     it('should calculate depth 7 correctly', function () {
         var state = game.initialize(7);
-        var ab = new ABPruneSearch(7, state);
-        var result = ab.searchMinMax();
+        var result = new ABPrune.MinMax(7, state).search();
         expect(result.data).toEqual([0, 0, 0, 0, 0, 0, 1]);
         expect(result.score).toBe(12);
         expect(result.move).toBe(6)
@@ -168,8 +165,8 @@ describe("The ABPruneSearch engine", function () {
     for (var i = 0; i < 8; i++) {
         (function (depth) {
             it('should have identical minmax and alphabeta searches (depth ' + i + ')', function () {
-                var searchMm = new ABPruneSearch(i, game.initialize(7)).searchMinMax();
-                var searchAb = new ABPruneSearch(i, game.initialize(7)).searchAlphaBeta();
+                var searchMm = new ABPrune.MinMax(i, game.initialize(7)).search();
+                var searchAb = new ABPrune.AlphaBeta(i, game.initialize(7)).search();
                 expect(searchAb.data).toEqual(searchMm.data);
                 expect(searchAb.move).toEqual(searchMm.move);
                 expect(searchAb.score).toEqual(searchMm.score);

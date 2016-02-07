@@ -2,7 +2,9 @@
  * Created by Paul Smith code@uvwxy.de on 28/01/16.
  */
 
-var ABPruneGame = (function () {
+var ABPrune = ABPrune || {};
+
+ABPrune.Game = (function () {
     return function ABPruneGameConstructor(implementation) {
         var self = this;
 
@@ -34,14 +36,14 @@ var ABPruneGame = (function () {
     };
 })();
 
-var ABPruneSearch = (function ABPrune() {
+ABPrune.AlphaBeta = (function () {
 
-    return function ABPruneConstructor(depth, state) {
+    return function SearchAlphaBetaConstructor(depth, state) {
         var self = this; // Cache the `this` keyword
         self._depth = depth;
         self._state = state;
 
-        self.searchAlphaBeta = function () {
+        self.search = function () {
             return self._alphabeta(self._state, self._depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
         };
 
@@ -92,8 +94,18 @@ var ABPruneSearch = (function ABPrune() {
             minScoredState.score = beta;
             return minScoredState;
         };
+    };
+})();
 
-        self.searchMinMax = function () {
+
+ABPrune.MinMax = (function ABPrune() {
+
+    return function SearchMinMaxConstructor(depth, state) {
+        var self = this; // Cache the `this` keyword
+        self._depth = depth;
+        self._state = state;
+
+        self.search = function () {
             return self._minmax(self._state, self._depth, true);
         };
 
