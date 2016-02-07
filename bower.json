@@ -1,7 +1,7 @@
 {
   "name": "abprune",
   "description": "Library that provides an alpha-beta pruning search algorithm",
-  "main": "abprune.js",
+  "main": "js/abprune.js",
   "authors": [
     "Paul Smith code@uvwxy.de"
   ],
