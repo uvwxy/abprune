@@ -7,8 +7,10 @@ var ABPrune = ABPrune || {};
 ABPrune.Game = (function () {
     return function ABPruneGameConstructor(implementation) {
         var self = this;
-
-        self.getSuccessors = function (max) {
+        self.hasMoves = function (playerId) {
+            throw new TypeError('hasMoves not implemented')
+        };
+        self.getSuccessors = function (playerId) {
             throw new TypeError('getSuccessors not implemented')
         };
         self.isGameOver = function () {
@@ -20,10 +22,11 @@ ABPrune.Game = (function () {
         self.isMoveValid = function (location, playerId) {
             throw new TypeError('isMoveValid not implemented')
         };
-        self.initialize = function initialize (size) {
-            throw new TypeError('isMoveValid not implemented')
+        self.initialize = function initialize(size) {
+            throw new TypeError('initialize not implemented')
         };
         self._copyFunctions = function (state) {
+            state.hasMoves = this.hasMoves;
             state.getSuccessors = this.getSuccessors;
             state.isGameOver = this.isGameOver;
             state.getScore = this.getScore;
@@ -58,11 +61,11 @@ ABPrune.AlphaBeta = (function () {
                 return state;
             }
 
-            return max ? self._abmax(state, depth, alpha, beta) : self._abmin(state, depth, alpha, beta);
+            return max && state.hasMoves(1) ? self._abmax(state, depth, alpha, beta) : self._abmin(state, depth, alpha, beta);
         };
 
         self._abmax = function (state, depth, alpha, beta) {
-            var states = state.getSuccessors(true);
+            var states = state.getSuccessors(1);
             var maxScoredState = null;
             for (var i = 0; i < states.length; i++) {
                 var eval = self._alphabeta(states[i], depth - 1, alpha, beta, false);
@@ -75,13 +78,13 @@ ABPrune.AlphaBeta = (function () {
                     break;
                 }
             }
-            maxScoredState = maxScoredState || {}; // not every path returns a state
+            maxScoredState = maxScoredState || {};
             maxScoredState.score = alpha;
             return maxScoredState;
         };
 
         self._abmin = function (state, depth, alpha, beta) {
-            var states = state.getSuccessors(false);
+            var states = state.getSuccessors(2);
             var minScoredState = null;
             for (var i = 0; i < states.length; i++) {
                 var eval = self._alphabeta(states[i], depth - 1, alpha, beta, true);
@@ -94,7 +97,7 @@ ABPrune.AlphaBeta = (function () {
                     break;
                 }
             }
-            minScoredState = minScoredState || {}; // not every path returns a state
+            minScoredState = minScoredState || {};
             minScoredState.score = beta;
             return minScoredState;
         };
@@ -119,14 +122,14 @@ ABPrune.MinMax = (function ABPrune() {
                 return state;
             }
 
-            return max ? self._max(state, depth) : self._min(state, depth);
+            return max && state.hasMoves(1) ? self._max(state, depth) : self._min(state, depth);
 
         };
 
         self._min = function (state, depth) {
             var minScore = Number.POSITIVE_INFINITY;
             var minScoredState = null;
-            var states = state.getSuccessors(false);
+            var states = state.getSuccessors(2);
 
             for (var i = 0; i < states.length; i++) {
                 var eval = self._minmax(states[i], depth - 1, true);
@@ -140,7 +143,7 @@ ABPrune.MinMax = (function ABPrune() {
         self._max = function (state, depth) {
             var maxScore = Number.NEGATIVE_INFINITY;
             var maxScoredState = null;
-            var states = state.getSuccessors(true);
+            var states = state.getSuccessors(1);
 
             for (var i = 0; i < states.length; i++) {
                 var eval = self._minmax(states[i], depth - 1, false);
