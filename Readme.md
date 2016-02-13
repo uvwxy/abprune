@@ -106,7 +106,7 @@ var game = new ABPrune.Game({
 
 Please make sure that the function `getSuccessors` creates a new game state in a similar fashion:
 
-```
+```javascript
 // clone actual game data
 var s = {data: this.data.slice(0)};
 
@@ -123,7 +123,7 @@ this._copyFunctions(s);
 
 Now that we have a variable `game` we can use this to search for the next best move:
 
-```
+```javascript
 var state = game.initialize(3);
 var result = new ABPrune.AlphaBeta(1, state).search();
 ```
