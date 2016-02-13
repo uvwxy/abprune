@@ -143,7 +143,7 @@ Where result contains the resulting state, move and score:
 
 ## ABPrune in Action
 An implementation currently using ABPrune can be found 
-[here](https://github.com/uvwxy/web-reversi), and in action [here](http://uvwxy.github.io/web-reversi)
+[here](https://github.com/uvwxy/web-reversi/blob/master/app/scripts/reversi-game.js)(see object `ReversiLogic`), and in action [here](http://uvwxy.github.io/web-reversi)
 
 
 
