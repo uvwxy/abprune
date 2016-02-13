@@ -2,6 +2,7 @@
 
 A JavaScript library to provide a minimax, as well as an alpha-beta search algorithm
 
+Detail background information on this topic on [Wikipedia](https://en.wikipedia.org/wiki/Alpha–beta_pruning).
 
 
 # Using ABPrune
@@ -143,7 +144,7 @@ Where result contains the resulting state, move and score:
 
 ## ABPrune in Action
 An implementation currently using ABPrune can be found 
-[here](https://github.com/uvwxy/web-reversi/blob/master/app/scripts/reversi-game.js)(see object `ReversiLogic`), and in action [here](http://uvwxy.github.io/web-reversi)
+[here](https://github.com/uvwxy/web-reversi/blob/master/app/scripts/reversi-game.js) (see object `ReversiLogic`), and in action [here](http://uvwxy.github.io/web-reversi)
 
 
 
